@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.domain.dto.ResponseData;
+import com.domain.dto.SearchDTO;
 import com.domain.models.entities.Product;
 import com.domain.models.entities.Suplier;
 import com.domain.services.ProductService;
@@ -85,6 +86,26 @@ public class ProductController {
     @PostMapping("/{id}")
     public void addSuplier(@RequestBody Suplier suplier, @PathVariable("id") Long productId) {
         productService.addSuplier(suplier, productId);
+    }
+
+    @PostMapping("/search/name")
+    public Product getProductByName(@RequestBody SearchDTO searchDTO) {
+        return productService.findByProductName(searchDTO.getSearchKey());
+    }
+
+    @PostMapping("/search/nameLike")
+    public List<Product> getProductByNameLike(@RequestBody SearchDTO searchDTO) {
+        return productService.findByProductNameLike(searchDTO.getSearchKey());
+    }
+
+    @GetMapping("/search/category/{categoryId}")
+    public List<Product> getProductByCategory(@PathVariable("categoryId") Long categoryId) {
+        return productService.findByCategory(categoryId);
+    }
+
+    @GetMapping("/search/supliers/{suplierId}")
+    public List<Product> getProductBySuplier(@PathVariable("suplierId") Long suplierId) {
+        return productService.findBySupliers(suplierId);
     }
 
 }
