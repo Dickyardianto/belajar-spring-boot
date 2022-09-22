@@ -34,12 +34,14 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<ResponseData<Category>> create(@Valid @RequestBody CategoryDTO categoryDTO, Errors errors) {
         ResponseData<Category> responseData = new ResponseData<>();
-        if(!errors.hasErrors()) {
+        if(errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
+                System.out.println(error.getDefaultMessage());
             }
-            responseData.setStatus(true);
+            responseData.setStatus(false);
             responseData.setData(null);
+            System.out.println(errors);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
 
@@ -66,7 +68,7 @@ public class CategoryController {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
             }
-            responseData.setStatus(true);
+            responseData.setStatus(false);
             responseData.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }

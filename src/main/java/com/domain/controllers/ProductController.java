@@ -20,19 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.domain.dto.ResponseData;
 import com.domain.models.entities.Product;
+import com.domain.models.entities.Suplier;
 import com.domain.services.ProductService;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-    
+
     @Autowired
     private ProductService productService;
 
     @PostMapping()
     public ResponseEntity<ResponseData<Product>> create(@Valid @RequestBody Product product, Errors errors) {
         ResponseData<Product> responseData = new ResponseData<>();
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
             }
@@ -58,7 +59,7 @@ public class ProductController {
     @PutMapping()
     public ResponseEntity<ResponseData<Product>> update(@Valid @RequestBody Product product, Errors errors) {
         ResponseData<Product> responseData = new ResponseData<>();
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
             }
@@ -79,6 +80,11 @@ public class ProductController {
     @PostMapping("/searchName")
     public List<Product> findName(@RequestBody Product product) {
         return productService.findByName(product);
+    }
+
+    @PostMapping("/{id}")
+    public void addSuplier(@RequestBody Suplier suplier, @PathVariable("id") Long productId) {
+        productService.addSuplier(suplier, productId);
     }
 
 }

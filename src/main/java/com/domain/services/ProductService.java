@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.domain.models.entities.Product;
+import com.domain.models.entities.Suplier;
 import com.domain.models.repos.ProductRepo;
 
 @Service
@@ -41,5 +42,14 @@ public class ProductService {
 
     public List<Product> findByName(Product product) {
         return productRepo.findByNameContains(product.getName());
+    }
+
+    public void addSuplier(Suplier suplier, Long productId) {
+        Product product = findOne(productId);
+        if(product == null) {
+            throw new RuntimeException("Product with ID " + productId + "Not Found");
+        }
+        product.getSupliers().add(suplier);
+        save(product);
     }
 }
