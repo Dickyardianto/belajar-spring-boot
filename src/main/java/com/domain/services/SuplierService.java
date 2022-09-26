@@ -1,5 +1,6 @@
 package com.domain.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -35,5 +36,21 @@ public class SuplierService {
 
     public void removeOne(Long id) {
         suplierRepo.deleteById(id);
+    }
+
+    public Suplier findByEmail(String name) {
+        return suplierRepo.findByEmail(name);
+    }
+
+    public List<Suplier> findByName(String name) {
+        return suplierRepo.findByNameContainsOrderByIdDesc(name);
+    }
+
+    public List<Suplier> findByNameStartWith(String name) {
+        return suplierRepo.findByNameStartingWith(name);
+    }
+
+    public List<Suplier> findByNameOrEmail(String name, String email) {
+        return suplierRepo.findByNameContainsOrEmailContains(name, email);
     }
 }

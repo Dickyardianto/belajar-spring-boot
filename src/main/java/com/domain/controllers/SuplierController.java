@@ -1,5 +1,7 @@
 package com.domain.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.domain.dto.ResponseData;
+import com.domain.dto.SearchDTO;
 import com.domain.dto.SuplierDTO;
 import com.domain.models.entities.Suplier;
 import com.domain.services.SuplierService;
@@ -77,5 +80,40 @@ public class SuplierController {
         responseData.setStatus(true);
         responseData.setData(suplierService.save(suplier));
         return ResponseEntity.ok(responseData);
+    }
+
+    @PostMapping("/search/byemail")
+    public ResponseEntity<ResponseData<Suplier>> findByEmail(@RequestBody SearchDTO searchDTO, Errors errors) {
+        ResponseData<Suplier> responseData = new ResponseData<>();
+
+        if(errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                responseData.getMessages().add(error.getDefaultMessage());
+            }
+            responseData.setStatus(false);
+            responseData.setData(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
+        }
+
+        responseData.setStatus(true);
+        responseData.setData(suplierService.findByEmail(searchDTO.getSearchKey()));
+        return ResponseEntity.ok(responseData);
+
+        // return suplierService.findByEmail(searchDTO.getSearchKey());
+    }
+
+    @PostMapping("/search/byName")
+    public List<Suplier> findByName(@RequestBody SearchDTO searchDTO) {
+        return suplierService.findByName(searchDTO.getSearchKey());
+    }
+
+    @PostMapping("/search/byNameStartWith")
+    public List<Suplier> findByNameStartWith(@RequestBody SearchDTO searchDTO) {
+        return suplierService.findByNameStartWith(searchDTO.getSearchKey());
+    }
+
+    @PostMapping("/search/byNameOrEmail")
+    public List<Suplier> findByNameOrEmail(@RequestBody SearchDTO searchDTO) {
+        return suplierService.findByNameOrEmail(searchDTO.getSearchKey(), searchDTO.getOtherSearchKey());
     }
 }
