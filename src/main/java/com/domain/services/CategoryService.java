@@ -19,6 +19,11 @@ public class CategoryService {
     private CategoryRepo categoryRepo;
 
     public Category save(Category category) {
+        if(category.getId()!=null) {
+            Category curCategory = categoryRepo.findById(category.getId()).get();
+            curCategory.setName(category.getName());
+            category = curCategory;
+        }
         return categoryRepo.save(category);
     }
 

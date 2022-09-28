@@ -70,7 +70,7 @@ public class CategoryController {
     @PutMapping
     public ResponseEntity<ResponseData<Category>> update(@Valid @RequestBody CategoryDTO categoryDTO, Errors errors) {
         ResponseData<Category> responseData = new ResponseData<>();
-        if(!errors.hasErrors()) {
+        if(errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 responseData.getMessages().add(error.getDefaultMessage());
             }
